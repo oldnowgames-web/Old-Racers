@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <title>Old Racers 3D</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <canvas id="g"></canvas>
+    <div id="menu" class="scr on">
+        <h1>OLD RACERS</h1>
+        <div class=sub>Corrida arcade 3D · 10 carros · 6 pistas</div><input id=pn maxlength=14
+            placeholder="✏️ Nome do piloto" autocomplete=off>
+        <button class="big pri" onclick="go(0)">🏁 Corrida Livre</button><button class="big" onclick="go(1)">🏆 Modo
+            Carreira</button><button class="big" onclick="go(2)">🛠️ Treino Livre</button><button class="big"
+            onclick="openGar('menu')">🚗 Garagem</button><button class="big" onclick="scr('set')">⚙️
+            Configurações</button><button class="big" onclick="fs()">⛶ Tela cheia</button>
+        <div id="hint">PC: WASD/Setas · Espaço = drift · Shift = nitro · E/Q = marcha ↑/↓ · T = auto/manual · C = câmera
+            · P = pausa</div>
+    </div>
+    <div id="sel" class="scr">
+        <div class="card" id="selc"></div>
+    </div>
+    <div id="gar" class="scr gar">
+        <div class="card" id="garc"></div>
+    </div>
+    <div id="set" class="scr">
+        <div class="card" id="setc"></div>
+    </div>
+    <div id="pause" class="scr" style="background:rgba(0,0,0,.6)">
+        <h1>PAUSA</h1><button class="big pri" onclick="pause()">Continuar</button><button class="big"
+            onclick="start()">Reiniciar</button><button class="big" onclick="scr('set')">⚙️
+            Configurações</button><button class="big" onclick="toMenu()">Menu principal</button>
+    </div>
+    <div id="end" class="scr" style="background:rgba(0,0,0,.6)">
+        <h1 id="et"></h1>
+        <div id="ed" class="card"></div>
+        <div id="en" style="text-align:center"></div><button class="big pri" onclick="start()">Próxima /
+            Repetir</button><button class="big" onclick="toMenu()">Menu principal</button>
+    </div>
+    <div id="hud"><canvas id="wd"></canvas>
+        <div id="info"></div>
+        <div id="cd"></div><canvas id="mm"></canvas><canvas id="spd"></canvas>
+        <div id="tc">
+            <div id="joy">
+                <div id="knob"></div>
+            </div>
+            <div id="gv">1</div><button class="tb" id="bn">NITRO</button><button class="tb"
+                id="bd">DRIFT</button><button class="tb" id="bu">UP</button><button class="tb"
+                id="bw">DOWN</button><button class="tb" id="bc">CAM</button>
+        </div>
+        <div id="cm"></div>
+        <div id="nc"></div>
+        <div id="fx"></div><button id="pb" onclick="pause()">⏸</button><button id="am" onclick="togAuto()"></button>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="game.js"></script>
+</body>
+
+</html>
