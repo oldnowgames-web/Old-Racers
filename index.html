@@ -15,11 +15,8 @@
         <h1>OLD RACERS</h1>
         <div class=sub>Corrida arcade 3D · 10 carros · 6 pistas</div><input id=pn maxlength=14
             placeholder="✏️ Nome do piloto" autocomplete=off>
-        <button class="big pri" onclick="go(0)">🏁 Corrida Livre</button><button class="big" onclick="go(1)">🏆 Modo
-            Carreira</button><button class="big" onclick="go(2)">🛠️ Treino Livre</button><button class="big"
-            onclick="openGar('menu')">🚗 Garagem</button><button class="big" onclick="scr('set')">⚙️
-            Configurações</button><button class="big" onclick="fs()">⛶ Tela cheia</button>
-        <div id="hint">PC: WASD/Setas · Espaço = drift · Shift = nitro (colete 5 tanques azuis para encher a barra) · E/Q = marcha ↑/↓ · T = auto/manual · C = câmera
+        <button class="big pri" onclick="go(0)">🏁 Corrida Livre</button><button class="big" onclick="go(1)">🏆 Modo Carreira</button><button class="big" onclick="go(2)">🛠️ Treino Livre</button><button class="big" onclick="scr('modes')">⚡ Modos Especiais</button><button class="big" onclick="openGar('menu')">🚗 Garagem</button><button class="big" onclick="scr('set')">⚙️ Configurações</button>
+        <div id="hint">PC: WASD/Setas · Espaço = drift · Shift = nitro (colete 5 tanques azuis) · F = usar item (caixas ?) · E/Q = marcha ↑/↓ · T = auto/manual · C = câmera
             · P = pausa</div>
     </div>
     <div id="sel" class="scr">
@@ -30,6 +27,15 @@
     </div>
     <div id="set" class="scr">
         <div class="card" id="setc"></div>
+    </div>
+    <div id="modes" class="scr">
+        <div class="card" id="modesc"></div>
+    </div>
+    <div id="rec" class="scr">
+        <div class="card" id="recc"></div>
+    </div>
+    <div id="keys" class="scr">
+        <div class="card" id="keysc"></div>
     </div>
     <div id="pause" class="scr" style="background:rgba(0,0,0,.6)">
         <h1>PAUSA</h1><button class="big pri" onclick="pause()">Continuar</button><button class="big"
@@ -66,6 +72,15 @@
     <script src="scenery.js"></script>
     <script src="studio.js"></script>
     <script src="finish.js"></script>
+    <script src="save.js"></script>
+    <script src="items.js"></script>
+    <script src="modes.js"></script>
+    <script src="shop.js"></script>
+    <script src="audio.js"></script>
+    <script src="vfx.js"></script>
+    <script src="controls.js"></script>
+    <script src="touch.js"></script>
+    <script src="perf.js"></script>
     <script src="menu.js"></script>
 </body>
 

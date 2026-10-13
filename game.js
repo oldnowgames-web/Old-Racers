@@ -115,8 +115,10 @@ function mini(){const s=mc.width,b=W.b,k=(s*.84)/Math.max(b[1]-b[0],(b[3]-b[2]))
 mx.clearRect(0,0,s,s);mx.fillStyle='rgba(8,12,24,.7)';mx.beginPath();mx.arc(s/2,s/2,s/2,0,2*PI);mx.fill();mx.strokeStyle='#aab';mx.lineWidth=s*.035;mx.beginPath();trk.forEach((a,i)=>i?mx.lineTo(X(a.x),Z(a.z)):mx.moveTo(X(a.x),Z(a.z)));mx.closePath();mx.stroke();
 cars.forEach(c=>{mx.fillStyle=c.pl?'#ff3d5a':'#4cc9ff';mx.beginPath();mx.arc(X(c.x),Z(c.z),s*(c.pl?.04:.028),0,2*PI);mx.fill()})}
 // câmera
+let CTH=0,CZ=0;
 function camUpd(dt){const c=pl,s=Math.sin(c.h),co=Math.cos(c.h),m=G.cam;c.mesh.userData.dr.visible=m!=0;let p;
-if(m==0){cam.position.set(c.x+s*.35,1.12,c.z+co*.35)}else{const d=m==1?4.2:7.4,h=m==1?1.6:3.2;p=new THREE.Vector3(c.x-s*d,h,c.z-co*d);cam.position.lerp(p,1-Math.exp(-10*dt))}
+CZ+=((state=='race'&&cd<=0&&CTH>0?1:0)-CZ)*Math.min(1,dt*(CTH>0?4:2.5));
+if(m==0){cam.position.set(c.x+s*.35,1.12,c.z+co*.35)}else{const d=(m==1?4.2:7.4)*(1-.45*CZ),h=(m==1?1.6:3.2)*(1-.3*CZ);p=new THREE.Vector3(c.x-s*d,h,c.z-co*d);cam.position.lerp(p,1-Math.exp(-10*dt))}
 cam.lookAt(c.x+s*(m==0?20:3),m==0?1:1,c.z+co*(m==0?20:3));const f=65+Math.min(25,Math.abs(c.vf)*.3)+(c.nt?10:0);cam.fov+=(f-cam.fov)*.1;cam.updateProjectionMatrix()}
 // loop
 let last=0,wt=0,bt=0;
@@ -134,7 +136,7 @@ phys(pl,dt,u);tankUpd(dt);
 bots.forEach(b=>{b.cap=cd>0?0:1+cl((pl.prog-b.i)/N*1.2,-[.06,.02,0][G.diff],[.1,.18,.28][G.diff]);
 if(cd<=0&&G.mode!=2&&G.diff>0&&b.bo!=null&&state=='race'){const gp2=b.i-pl.prog,A=trk[pl.idx],dl=(pl.x-A.x)*A.nx+(pl.z-A.z)*A.nz,tg=gp2>.5&&gp2<7?cl(dl,-6.5,6.5):b.bo;b.off+=(tg-b.off)*Math.min(1,dt*[0,.6,1.4][G.diff])}
 botMove(b,dt);if(!b.ft&&G.mode!=2&&b.i>=(G.laps+1)*N)b.ft=tm;const dx=pl.x-b.x,dz=pl.z-b.z,d=Math.hypot(dx,dz);if(d<2.8&&d>0){pl.x+=dx/d*(2.8-d);pl.z+=dz/d*(2.8-d);pl.vx*=.97;pl.vz*=.97}});
-camUpd(dt);sfx(u);extra(dt);
+CTH=u.th;camUpd(dt);sfx(u);extra(dt);
 const pos=1+bots.filter(b=>b.prog>pl.prog).length,lap=cl(pl.lap,1,G.laps);
 $('info').innerHTML=`<div class=pos>${pos}<small>/${bots.length+1}</small></div><span class=chip>VOLTA ${lap}/${G.mode==2?'∞':G.laps}</span><span class=chip>${fmt(tm)}</span>`;$('gv').textContent=pl.gear==0?'R':pl.gear;
 gauge();mini();if(state=='end'){bt+=dt;if(bt>.5){bt=0;$('ed').innerHTML=board()}}

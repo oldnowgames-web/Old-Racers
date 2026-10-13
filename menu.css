@@ -51,3 +51,5 @@
 #menu .mver{position:absolute;right:14px;bottom:24px;font-size:11px;letter-spacing:3px;opacity:.55;font-style:italic;z-index:2;margin:0}
 @media(max-height:560px){#menu h1{font-size:44px}#menu .mtag{display:none}#menu .big{padding:8px;font-size:14px}#menu #hint{display:none}}
 @media(prefers-reduced-motion:reduce){#menu *,#menu *::before,#menu *::after{animation:none!important}}
+
+#menu>.mcoin{position:absolute}
