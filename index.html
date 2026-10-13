@@ -6,6 +6,7 @@
     <title>Old Racers 3D</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="menu.css">
 </head>
 
 <body>
@@ -18,7 +19,7 @@
             Carreira</button><button class="big" onclick="go(2)">🛠️ Treino Livre</button><button class="big"
             onclick="openGar('menu')">🚗 Garagem</button><button class="big" onclick="scr('set')">⚙️
             Configurações</button><button class="big" onclick="fs()">⛶ Tela cheia</button>
-        <div id="hint">PC: WASD/Setas · Espaço = drift · Shift = nitro · E/Q = marcha ↑/↓ · T = auto/manual · C = câmera
+        <div id="hint">PC: WASD/Setas · Espaço = drift · Shift = nitro (colete 5 tanques azuis para encher a barra) · E/Q = marcha ↑/↓ · T = auto/manual · C = câmera
             · P = pausa</div>
     </div>
     <div id="sel" class="scr">
@@ -58,6 +59,14 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="game.js"></script>
+    <script src="cars.js"></script>
+    <script src="pilot.js"></script>
+    <script src="fx.js"></script>
+    <script src="track.js"></script>
+    <script src="scenery.js"></script>
+    <script src="studio.js"></script>
+    <script src="finish.js"></script>
+    <script src="menu.js"></script>
 </body>
 
 </html>
