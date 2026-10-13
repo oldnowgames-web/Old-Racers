@@ -33,15 +33,21 @@ ACT.map(([a,n])=>`<div class="row" style="justify-content:space-between"><b styl
 '<div class=row><button onclick="KEYS.reset()">Restaurar padrão</button><button class="pri" onclick="scr(\'set\')">OK</button></div>'}
 const _scr=scr;scr=function(id){_scr(id);if(id=='keys')renderKeys()};
 // ---------- inclinação do celular (volante) ----------
-const TL={on:0,v:0,th0:null,s:0};
-function onMotion(e){const g=e.accelerationIncludingGravity;if(!g||g.x==null||g.y==null)return;
-const ang=((screen.orientation&&screen.orientation.angle)||window.orientation||0)*Math.PI/180,ios=/iPhone|iPad|iPod/.test(navigator.userAgent)?-1:1,gx=g.x*ios,gy=g.y*ios,
-sx=gx*Math.cos(ang)-gy*Math.sin(ang),sy=gx*Math.sin(ang)+gy*Math.cos(ang),th=Math.atan2(sx,sy);TL.on=1;
+// Usa o vetor "para cima" no referencial do aparelho. Fonte principal: devicemotion; se ele não mandar dados, usa deviceorientation.
+const TL={on:0,v:0,th0:null,s:0,src:0,lm:0};
+function feed(ux,uy,src){if(TL.src!==src){TL.src=src;TL.th0=null}
+const ang=((screen.orientation&&screen.orientation.angle)||window.orientation||0)*Math.PI/180,
+sx=ux*Math.cos(ang)-uy*Math.sin(ang),sy=ux*Math.sin(ang)+uy*Math.cos(ang),th=Math.atan2(sx,sy);TL.on=1;
 if(TL.th0==null||state!='race'||cd>0)TL.th0=th;
-let d=th-TL.th0;d=Math.atan2(Math.sin(d),Math.cos(d));if(Math.abs(d)<.05)d=0;TL.s+=(cl(d/.55,-1,1)-TL.s)*.35;TL.v=TL.s*(G.tinv?-1:1)}
-let lis=0;function listen(){if(lis)return;lis=1;addEventListener('devicemotion',onMotion)}
-function reqTilt(){try{if(typeof DeviceMotionEvent!='undefined'&&DeviceMotionEvent.requestPermission){DeviceMotionEvent.requestPermission().then(r=>{if(r=='granted')listen();else TOAST('Permissão de movimento negada')}).catch(()=>{})}else listen()}catch(e){}}
-if(G.tilt)listen();
+let d=th-TL.th0;d=Math.atan2(Math.sin(d),Math.cos(d));if(Math.abs(d)<.05)d=0;TL.s+=(cl(d/.55,-1,1)-TL.s)*.35;TL.v=TL.s*(G.tinv?1:-1)}   // girar o celular no sentido horário (como um volante) = virar à direita
+function onMotion(e){const g=e.accelerationIncludingGravity;if(!g||g.x==null||g.y==null)return;TL.lm=performance.now();const ios=/iPhone|iPad|iPod/.test(navigator.userAgent)?-1:1;feed(g.x*ios,g.y*ios,1)}
+function onOri(e){if(e.beta==null||e.gamma==null)return;if(TL.lm&&performance.now()-TL.lm<800)return;const b=e.beta*Math.PI/180,g=e.gamma*Math.PI/180;feed(-Math.cos(b)*Math.sin(g),Math.sin(b),2)}
+let lis=0;function listen(){if(lis)return;lis=1;addEventListener('devicemotion',onMotion);addEventListener('deviceorientation',onOri);
+setTimeout(()=>{if(G.tilt&&!TL.on)TOAST('Sem sinal do sensor de movimento (precisa de HTTPS e permissão do navegador)','linear-gradient(100deg,#ff5a6e,#7c4dff)')},2500)}
+// iOS exige pedir permissão num toque do usuário (e de novo a cada abertura da página)
+const needPerm=()=>typeof DeviceMotionEvent!='undefined'&&typeof DeviceMotionEvent.requestPermission=='function';
+function reqTilt(){try{if(needPerm()){DeviceMotionEvent.requestPermission().then(r=>{if(r=='granted')listen();else TOAST('Permissão de movimento negada')}).catch(()=>TOAST('Não foi possível pedir permissão de movimento'))}else listen()}catch(e){}}
+if(G.tilt){if(needPerm()){const once=()=>{removeEventListener('touchend',once,true);removeEventListener('click',once,true);reqTilt()};addEventListener('touchend',once,true);addEventListener('click',once,true)}else listen()}
 const _pk=pick;pick=function(k,i){_pk(k,i);if(k=='tilt'&&i==1)reqTilt()};
 const _inp=inp;inp=function(){const o=_inp();if(G.tilt&&TL.on)o.st=TL.v;return o};
 // ---------- opções novas nas Configurações / seleção de clima ----------

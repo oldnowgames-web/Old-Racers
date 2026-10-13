@@ -7,7 +7,7 @@ const TRACKS=[{n:'Circuito Verde',R:260,a:60,k:3,ph:0,g:0x3f8f3f,sky:0x87ceeb,t:
 const COLS=[0xe63946,0x2a6fdb,0xf4c430,0x2ecc71,0xffffff,0x9b59b6,0x222222],hx=c=>'#'+c.toString(16).padStart(6,'0');
 let G={car:0,col:0,trk:0,mode:0,wx:0,laps:3,bots:5,cam:2,hc:1,su:0,hs:0,q:1,vol:1,auto:1,diff:1},career=0;
 try{career=+localStorage.getItem('trc')||0}catch(e){}
-const ren=new THREE.WebGLRenderer({canvas:$('g'),antialias:true}),scn=new THREE.Scene(),cam=new THREE.PerspectiveCamera(70,1,.1,2500);
+const ren=new THREE.WebGLRenderer({canvas:$('g'),antialias:!matchMedia('(pointer:coarse)').matches,powerPreference:'high-performance'}),scn=new THREE.Scene(),cam=new THREE.PerspectiveCamera(70,1,.1,2500);
 const hemi=new THREE.HemisphereLight(0xffffff,0x556677,.9),sun=new THREE.DirectionalLight(0xffffff,.9);sun.position.set(200,300,100);scn.add(hemi,sun);
 let N=400,trk,W={aw:0},world=new THREE.Group(),bots=[],pl=null,prev=null,state='menu',cd=0,tm=0,cur='menu',cars=[];
 // chuva
@@ -300,7 +300,7 @@ mt+=.12;ms++}}
 setInterval(mus,40);
 requestAnimationFrame(loop);
 // ===== UPGRADE GRÁFICO =====
-ren.shadowMap.enabled=true;ren.shadowMap.type=THREE.PCFSoftShadowMap;ren.toneMapping=THREE.ACESFilmicToneMapping;ren.toneMappingExposure=1.1;
+ren.shadowMap.enabled=true;ren.shadowMap.type=matchMedia('(pointer:coarse)').matches?THREE.PCFShadowMap:THREE.PCFSoftShadowMap;ren.toneMapping=THREE.ACESFilmicToneMapping;ren.toneMappingExposure=1.1;
 sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-60,right:60,top:60,bottom:-60,near:1,far:500});sun.shadow.camera.updateProjectionMatrix();sun.shadow.bias=-.0004;sun.shadow.normalBias=.06;scn.add(sun.target);
 function vCv(w,h,f){const c=document.createElement('canvas');c.width=w;c.height=h;f(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=8;return t}
 const GT=vCv(64,64,x=>{const g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.25,'rgba(255,255,255,.4)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,64,64)});
@@ -489,7 +489,7 @@ const _p5=parts;parts=function(dt){_p5(dt);if(state=='menu'&&prev&&prev.userData
 const _cu=camUpd;camUpd=function(dt){_cu(dt);const sp=Math.abs(pl.vf);cam.rotateZ(-(pl.sv||0)*.03*cl(sp/45,0,1));if(sp>35){const k=(sp-35)*.0006;cam.position.x+=(R()-.5)*k;cam.position.y+=(R()-.5)*k}};
 // pista com relevo e sombras mais nítidas na qualidade alta
 const _b4=build;build=function(ti){_b4(ti);if(W.road){W.road.material.bumpMap=ASP;W.road.material.bumpScale=.5;W.road.material.needsUpdate=true}};
-let q0=-1;const _r3=rs;rs=function(){_r3();if(q0!=G.q){q0=G.q;const z=G.q==2?4096:G.q==1?2048:1024;sun.shadow.mapSize.set(z,z);if(sun.shadow.map){sun.shadow.map.dispose();sun.shadow.map=null}}};
+let q0=-1;const _r3=rs;rs=function(){_r3();if(q0!=G.q){q0=G.q;const co=matchMedia('(pointer:coarse)').matches,z=G.q==2?(co?2048:4096):G.q==1?(co?1024:2048):1024;sun.shadow.mapSize.set(z,z);if(sun.shadow.map){sun.shadow.map.dispose();sun.shadow.map=null}}};
 rs();buildMenu();
 })();
 
