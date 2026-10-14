@@ -56,7 +56,7 @@ function pilot(){return{hc:COLS[G.hc],su:COLS[G.su],hs:G.hs}}
 function mkEnt(S,col,pil,player){const e={s:S,mesh:mkCar(S,col,{...pil,lamp:player}),x:0,z:0,h:0,vx:0,vz:0,vf:0,gear:1,nit:1,nt:0,idx:0,lap:0,prog:0,off:0,drift:0,pl:player};world.add(e.mesh);return e}
 function place(e,idx,side){const a=trk[idx%N];e.x=a.x+a.nx*side;e.z=a.z+a.nz*side;e.h=Math.atan2(a.tx,a.tz);e.vx=e.vz=e.vf=0;e.idx=idx%N;e.mesh.position.set(e.x,0,e.z);e.mesh.rotation.y=e.h}
 function mkBots(n,diff,mul){bots=[];const bo=G.mode==1?career*7:(R()*BN.length|0);for(let k=1;k<=n;k++){const S=CARS[k%CARS.length],e=mkEnt(S,COLS[(k+2)%7],{hc:COLS[k%7],su:COLS[(k+3)%7],hs:k%3});const row=k>>1;e.i=N-3-row*2;const bn=BN[(k*5+bo)%BN.length];e.nm=bn+" · "+S.n;e.mesh.add(tag(bn));e.sk=Math.min(1.32,(.92+R()*.1)*diff*mul);e.off=e.bo=k%2?-4:4;e.v=0;e.bot=1;botMove(e,0);bots.push(e)}}
-function botMove(b,dt){const k=Math.floor(b.i)%N,A=trk[k],B=trk[(k+8)%N],cu=Math.abs(A.tx*B.tz-A.tz*B.tx),v=(b.s.top*.4+70*.6)*b.sk*(1-Math.min(.36,cu*4.2))*(b.cap==null?1:b.cap)*(W.rain?.93:1);
+function botMove(b,dt){if(b.net&&window.NETMOVE){NETMOVE(b,dt);return}const k=Math.floor(b.i)%N,A=trk[k],B=trk[(k+8)%N],cu=Math.abs(A.tx*B.tz-A.tz*B.tx),v=(b.s.top*.4+70*.6)*b.sk*(1-Math.min(.36,cu*4.2))*(b.cap==null?1:b.cap)*(W.rain?.93:1);
 b.v+=(v-b.v)*Math.min(1,dt*1.5);b.i+=b.v*dt/W.seg;const k0=Math.floor(b.i),f=b.i-k0,a=trk[k0%N],c=trk[(k0+1)%N];
 b.x=a.x+(c.x-a.x)*f+a.nx*b.off;b.z=a.z+(c.z-a.z)*f+a.nz*b.off;b.h=Math.atan2(a.tx,a.tz);b.vf=b.v;b.prog=b.i;b.mesh.position.set(b.x,0,b.z);b.mesh.rotation.y=b.h}
 // física
